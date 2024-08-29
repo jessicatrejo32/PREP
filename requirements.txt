@@ -1,0 +1,12 @@
+requests
+pandas
+numpy
+selenium
+webdriver_manager
+rich
+pytz
+pillow
+chromium
+chromedriver-autoinstaller
+pytest
+allure-pytest
