@@ -191,7 +191,7 @@ else:
 @allure.tag('prioridad:alta', 'tipo:funcional')
 def test_actas_fuera_catalogo_coinciden():
     """
-    Prueba que los valores de ACTAS_FUERA_CATALOGO coincidan con los valores esperados.
+    Prueba que los valores de ACTAS_FUERA_CATALOGO coincidan con los valores esperados.-Prueban
     """
     with allure.step("Comparando los valores de ACTAS_FUERA_CATALOGO con los esperados"):
         if np.array_equal(value_counts1, actas_fuera):
