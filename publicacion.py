@@ -13,6 +13,12 @@ from PIL import Image
 import pytest
 import allure
 
+
+# Crear la carpeta 'screenshots' si no existe
+screenshots_folder = 'screenshots_publi'
+if not os.path.exists(screenshots_folder):
+    os.makedirs(screenshots_folder)
+
 def get_next_screenshot_path(folder, base_filename):
     """Genera el siguiente nombre de archivo disponible con un número consecutivo."""
     i = 1
@@ -59,23 +65,6 @@ def capture_element_screenshot(driver, element, file_path):
             os.remove(screenshot_path)  # Eliminar el archivo temporal
     #print(f'Captura de pantalla del elemento guardada en {file_path}')
 
-# Configurar las opciones de Chrome para el modo headless
-chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument("--headless")
-chrome_options.add_argument("--window-size=1920x1080")  # Tamaño de ventana para las capturas de pantalla
-chrome_options.add_argument("--disable-gpu")  # Recomendado en sistemas Windows
-chrome_options.add_argument("--no-sandbox")  # Requerido para algunas distribuciones de Linux
-chrome_options.add_argument("--disable-dev-shm-usage")  # Requerido para algunas distribuciones de Linux
-
-# Configurar el controlador de Chrome
-chromedriver_autoinstaller.install() 
-driver = webdriver.Chrome(options=chrome_options)
-print("Versión chromedriver:", driver.capabilities['browserVersion'])
-driver.maximize_window()
-
-# URL de la página que deseas validar
-url = 'https://prep2024.ine.mx/publicacion/nacional/presidencia/nacional/candidatura'
-
 # Leer el archivo CSV en un DataFrame
 csv_path = '/var/jenkins_home/workspace/Publicacion/Archivos/PRES_2024.csv'
 df = pd.read_csv(csv_path, skiprows=3, nrows=1, header=None, names=["ACTAS_ESPERADAS","ACTAS_REGISTRADAS","ACTAS_FUERA_CATALOGO","ACTAS_CAPTURADAS","PORCENTAJE_ACTAS_CAPTURADAS","ACTAS_CONTABILIZADAS","PORCENTAJE_ACTAS_CONTABILIZADAS","PORCENTAJE_ACTAS_INCONSISTENCIAS","ACTAS_NO_CONTABILIZADAS","LISTA_NOMINAL_ACTAS_CONTABILIZADAS","TOTAL_VOTOS_C_CS","TOTAL_VOTOS_S_CS","PORCENTAJE_PARTICIPACION_CIUDADANA"])
@@ -95,10 +84,22 @@ TOTAL_VOTOS_C_CS = 'TOTAL_VOTOS_C_CS'
 TOTAL_VOTOS_S_CS = 'TOTAL_VOTOS_S_CS'
 PORCENTAJE_PARTICIPACION_CIUDADANA = 'PORCENTAJE_PARTICIPACION_CIUDADANA'
 
-# Crear la carpeta 'screenshots' si no existe
-screenshots_folder = 'screenshots_publi'
-if not os.path.exists(screenshots_folder):
-    os.makedirs(screenshots_folder)
+# Configurar las opciones de Chrome para el modo headless
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--window-size=1920x1080")  # Tamaño de ventana para las capturas de pantalla
+chrome_options.add_argument("--disable-gpu")  # Recomendado en sistemas Windows
+chrome_options.add_argument("--no-sandbox")  # Requerido para algunas distribuciones de Linux
+chrome_options.add_argument("--disable-dev-shm-usage")  # Requerido para algunas distribuciones de Linux
+
+# Configurar el controlador de Chrome
+chromedriver_autoinstaller.install() 
+driver = webdriver.Chrome(options=chrome_options)
+print("Versión chromedriver:", driver.capabilities['browserVersion'])
+driver.maximize_window()
+
+# URL de la página que deseas validar
+url = 'https://prep2024.ine.mx/publicacion/nacional/presidencia/nacional/candidatura'
 
 # Navegar a la página web
 driver.get(url)
@@ -156,27 +157,23 @@ try:
     else:
         print("1.- El número de actas esperadas en Estadística Nacional no coincide con el CSV.",valor_con_comas2)  
 
-    @allure.feature('Validación de datos CSV Publicación')  # Usa etiquetas estándar de Allure
-    @allure.story('13.- Validación de Porcentaje de Participación Ciudadana')  # Usa etiquetas estándar de Allure
-    @allure.tag('prioridad:alta', 'tipo:funcional')
-
     @allure.feature('Validación de datos en sitio de Publicación')  # Usa etiquetas estándar de Allure
     @allure.story('1.- Validación de número de actas esperadas en Estadística Nacional')  # Usa etiquetas estándar de Allure
     @allure.tag('prioridad:alta', 'tipo:funcional')
     def test_actas_esperadas_estadistica_acional_coinciden():
         """
-        Prueba que los valores de actas esperadas en Estadística Nacional coincidan con los valores del CSV.-Prueba
+        Prueba que los valores de actas esperadas en Estadística Nacional coincidan con los valores del CSV.
         """
-        with allure.step("Comparando los valores de actas esperadas en Estadística Nacional con los esperados"):
+        with allure.step("Comparando los valores de sitio vs csv"):
             if valor_en_pagina3 == valor_con_comas2:
                 allure.attach(
-                    f"2.- Los valores de actas esperadas en Estadística Nacional coinciden: {valor_con_comas2}",
+                    f"1.- Los valores coinciden, Sitio: {valor_en_pagina3} CSV: {valor_con_comas2}",
                     name="Resultado de la validación",
                     attachment_type=allure.attachment_type.TEXT
                 )
             else:
                 allure.attach(
-                    f"2.- Los valores de actas esperadas en Estadística Nacional no coinciden. {valor_con_comas2} vs {valor_en_pagina3}",
+                    f"1.- Los valores no coinciden, Sitio: {valor_en_pagina3} CSV: {valor_con_comas2}",
                     name="Resultado de la validación",
                     attachment_type=allure.attachment_type.TEXT
                 )
@@ -188,20 +185,117 @@ try:
         print("4.- El número de actas capturadas en Avance Nacional coincide con el CSV.",valor_con_comas)
     else:
         print("4.- El número de actas capturadas en Avance Nacional no coincide con el CSV.",valor_con_comas)  
+
+    @allure.feature('Validación de datos en sitio de Publicación')  # Usa etiquetas estándar de Allure
+    @allure.story('2.- Validación de número de actas capturadas en Avance Nacional')  # Usa etiquetas estándar de Allure
+    @allure.tag('prioridad:alta', 'tipo:funcional')
+    def test_actas_capturadas_avance_nacional_coinciden():
+        """
+        Prueba que los valores de actas capturadas en Avance Nacional coincidan con los valores del CSV.
+        """
+        with allure.step("Comparando los valores de sitio vs csv"):
+            if valor_en_pagina == valor_con_comas:
+                allure.attach(
+                    f"2.- Los valores coinciden, Sitio: {valor_en_pagina} CSV: {valor_con_comas} ",
+                    name="Resultado de la validación",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+            else:
+                allure.attach(
+                    f"2.- Los valores no coinciden, Sitio: {valor_en_pagina} CSV: {valor_con_comas}",
+                    name="Resultado de la validación",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+            assert valor_en_pagina == valor_con_comas, (
+                "Los valores no coinciden. Revisa el reporte para más detalles."
+            )
+
     if valor_en_pagina2 == valor_con_comas:
         print("4.- El número de actas capturadas en Estadística Nacional coincide con el CSV.",valor_con_comas)
     else:
         print("4.- El número de actas capturadas en Estadística Nacional no coincide con el CSV.",valor_con_comas)  
     
+    @allure.feature('Validación de datos en sitio de Publicación')  # Usa etiquetas estándar de Allure
+    @allure.story('3.- Validación de número de actas capturadas en Estadística Nacional')  # Usa etiquetas estándar de Allure
+    @allure.tag('prioridad:alta', 'tipo:funcional')
+    def test_actas_capturadas_estadistica_nacional_coinciden():
+        """
+        Prueba que los valores de actas capturadas en Estadística Nacional coincidan con los valores del CSV.
+        """
+        with allure.step("Comparando los valores de sitio vs csv"):
+            if valor_en_pagina2 == valor_con_comas:
+                allure.attach(
+                    f"3.- Los valores coinciden, Sitio: {valor_en_pagina2} CSV: {valor_con_comas} ",
+                    name="Resultado de la validación",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+            else:
+                allure.attach(
+                    f"3.- Los valores no coinciden, Sitio: {valor_en_pagina2} CSV: {valor_con_comas}",
+                    name="Resultado de la validación",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+            assert valor_en_pagina2 == valor_con_comas, (
+                "Los valores no coinciden. Revisa el reporte para más detalles."
+            )
 
     if valor_en_pagina4 == valor_con_comas3:
         print("11.- El total de votos coincide con el CSV.",valor_con_comas3)
     else:
-        print("11.- El total de votos no coincide con el CSV.",valor_con_comas3)  
+        print("11.- El total de votos no coincide con el CSV.",valor_con_comas3) 
+
+    @allure.feature('Validación de datos en sitio de Publicación')  # Usa etiquetas estándar de Allure
+    @allure.story('3.- Validación de total de votos')  # Usa etiquetas estándar de Allure
+    @allure.tag('prioridad:alta', 'tipo:funcional')
+    def test_total_votos_coinciden():
+        """
+        Prueba que los valores de total de votosl coincidan con los valores del CSV.
+        """
+        with allure.step("Comparando los valores de sitio vs csv"):
+            if valor_en_pagina4 == valor_con_comas3:
+                allure.attach(
+                    f"3.- Los valores coinciden, Sitio: {valor_en_pagina4} CSV: {valor_con_comas3} ",
+                    name="Resultado de la validación",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+            else:
+                allure.attach(
+                    f"3.- Los valores no coinciden, Sitio: {valor_en_pagina4} CSV: {valor_con_comas3}",
+                    name="Resultado de la validación",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+            assert valor_en_pagina4 == valor_con_comas3, (
+                "Los valores no coinciden. Revisa el reporte para más detalles."
+            )
+
     if valor_en_pagina5 == valor_con_comas3:
         print("11.- El total de votos en Fórmula coincide con el CSV.",valor_con_comas3)
     else:
         print("11.- El total de votos en Fórmula no coincide con el CSV.",valor_con_comas3)  
+
+    @allure.feature('Validación de datos en sitio de Publicación')  # Usa etiquetas estándar de Allure
+    @allure.story('3.- Validación de total de votos 2')  # Usa etiquetas estándar de Allure
+    @allure.tag('prioridad:alta', 'tipo:funcional')
+    def test_total_votos2_coinciden():
+        """
+        Prueba que los valores de total de votosl coincidan con los valores del CSV.
+        """
+        with allure.step("Comparando los valores de sitio vs csv"):
+            if valor_en_pagina5 == valor_con_comas3:
+                allure.attach(
+                    f"3.- Los valores coinciden, Sitio: {valor_en_pagina5} CSV: {valor_con_comas3} ",
+                    name="Resultado de la validación",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+            else:
+                allure.attach(
+                    f"3.- Los valores no coinciden, Sitio: {valor_en_pagina5} CSV: {valor_con_comas3}",
+                    name="Resultado de la validación",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+            assert valor_en_pagina5 == valor_con_comas3, (
+                "Los valores no coinciden. Revisa el reporte para más detalles."
+            )
 
 except Exception as e:
     print("Elemento no encontrado:", e)
