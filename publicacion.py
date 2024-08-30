@@ -165,7 +165,7 @@ try:
     @allure.tag('prioridad:alta', 'tipo:funcional')
     def test_actas_esperadas_estadistica_acional_coinciden():
         """
-        Prueba que los valores de actas esperadas en Estadística Nacional coincidan con los valores del CSV.
+        Prueba que los valores de actas esperadas en Estadística Nacional coincidan con los valores del CSV.-Prueba
         """
         with allure.step("Comparando los valores de actas esperadas en Estadística Nacional con los esperados"):
             if valor_en_pagina3 == valor_con_comas2:
