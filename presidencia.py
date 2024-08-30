@@ -220,7 +220,7 @@ else:
 @allure.tag('prioridad:alta', 'tipo:funcional')
 def test_actas_capturadas_coinciden():
     """
-    Prueba que los valores de ACTAS_CAPTURADAS coincidan con los valores esperados.
+    Prueba que los valores de ACTAS_CAPTURADAS coincidan con los valores esperados Pruea.
     """
     with allure.step("Comparando los valores de ACTAS_CAPTURADAS con los esperados"):
         if np.array_equal(value_counts4, actas_cap):
