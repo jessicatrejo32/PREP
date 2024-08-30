@@ -155,7 +155,7 @@ else:
 @allure.tag('prioridad:alta', 'tipo:funcional')
 def test_actas_registradas_coinciden():
     """
-    Prueba que los valores de ACTAS_REGISTRADAS coincidan con los valores esperados.
+    Prueba que los valores de ACTAS_REGISTRADAS PRUEBA coincidan con los valores esperados.
     """
     with allure.step("Comparando los valores de ACTAS_REGISTRADAS con los esperados"):
         if np.array_equal(value_counts3, actas_regis):
