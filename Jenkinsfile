@@ -4,13 +4,13 @@ pipeline {
         VENV_DIR = '/var/jenkins_home/workspace/Publicacion/venv'
     }
     stages {
-        stage('Clean Up and Checkout ') {
-            steps {
-                deleteDir()
+        //stage('Clean Up and Checkout ') {
+            //steps {
+                //deleteDir()
                 // Clonar el repositorio Git
-                git url: 'https://github.com/ericruizINE/descargaCSV.git', branch: 'main'
-            }
-        }
+                //git url: 'https://github.com/ericruizINE/descargaCSV.git', branch: 'main'
+            //}
+        //}
         stage('Install & Setup venv') {
             steps {
                 // Instalar el paquete python3-venv si aún no está instalado
@@ -33,21 +33,7 @@ pipeline {
             sh """
                     . ${VENV_DIR}/bin/activate > /dev/null 2>&1
                     python3 24-05-07-BD-Descarga-Descomprimir_1.py
-               """
-          }
-        }
-        stage('Validación datos en CSV') {
-          steps {
-            sh """
-                    . ${VENV_DIR}/bin/activate > /dev/null 2>&1
                     python3 presidencia.py
-               """
-          }
-        }
-        stage('Validacion Publicación - Presidencia') {
-          steps {
-            sh """
-                    . ${VENV_DIR}/bin/activate > /dev/null 2>&1
                     python3 publicacion.py
                """
           }
@@ -76,6 +62,7 @@ pipeline {
                     . ${VENV_DIR}/bin/activate > /dev/null 2>&1
                     pytest presidencia.py --alluredir=report
                     pytest publicacion.py --alluredir=report
+                    pytest pytestpubli.py --alluredir=report
                """
             }
         }
