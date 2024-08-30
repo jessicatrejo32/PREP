@@ -126,8 +126,8 @@ def screenshots_folder():
 def test_actas_esperadas_estadistica_nacional_coinciden(setup, df, screenshots_folder):
     valor_con_comas2 = "{:,.0f}".format(int("".join(str(x) for x in df['ACTAS_ESPERADAS'].astype(int).values)))
 
-    driver = setup
-    elemento3 = driver.find_element(By.XPATH, "/html/body/app-root/app-federal/div/div/div[3]/app-nacional/div/app-estadistica/div[1]/div[1]/div[2]/div[1]/p[1]/strong")
+    driver = setup 
+    elemento3 = driver.find_element(By.XPATH, "/html/body/app-root/app-federal/div/div/div[3]/app-nacional/div/app-estadistica/div[1]/div[1]/div[2]/div[2]/p[1]/strong")
     valor_en_pagina3 = elemento3.text
 
     file_path = get_next_screenshot_path(screenshots_folder, 'actas_esperadas')
