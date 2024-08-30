@@ -136,6 +136,12 @@ if TOTAL_VOTOS_CALCULADO in df.columns and TIPO_CASILLA in df.columns:
     actas_cap_por = df1[PORCENTAJE_ACTAS_CAPTURADAS].values
     actas_con = df1[ACTAS_CONTABILIZADAS].values
     actas_con_por = df1[PORCENTAJE_ACTAS_CONTABILIZADAS].values
+    actas_incon_por = df1[PORCENTAJE_ACTAS_INCONSISTENCIAS].values
+    actas_nocon = df1[ACTAS_NO_CONTABILIZADAS].values
+    lnactascon = df1[LISTA_NOMINAL_ACTAS_CONTABILIZADAS].values
+    totalvotosc = df1[TOTAL_VOTOS_C_CS].values
+    totalvotoss = df1[TOTAL_VOTOS_S_CS].values
+    participacionciu = df1[PORCENTAJE_PARTICIPACION_CIUDADANA].values
     #print(value_counts11)
 
 print("VALIDACION DE CSV DE PRESIDENCIA, REALIZANDO CONTEOS CON LOS DATOS Y VALIDANDO CON EL PRIMER ENCABEZADO")
@@ -155,7 +161,7 @@ else:
 @allure.tag('prioridad:alta', 'tipo:funcional')
 def test_actas_registradas_coinciden():
     """
-    Prueba que los valores de ACTAS_REGISTRADAS PRUEBA coincidan con los valores esperados.
+    Prueba que los valores de ACTAS_REGISTRADAS coincidan con los valores esperados.
     """
     with allure.step("Comparando los valores de ACTAS_REGISTRADAS con los esperados"):
         if np.array_equal(value_counts3, actas_regis):
@@ -322,37 +328,181 @@ def test_actas_porcentaje_contabilizadas_coinciden():
             "Los valores no coinciden. Revisa el reporte para más detalles."
         )
 
-if np.array_equal(value_counts7, df1[PORCENTAJE_ACTAS_INCONSISTENCIAS].values):
-    print("[green]8.- Los valores de PORCENTAJE_ACTAS_INCONSISTENCIAS coinciden:[/green]", df1[PORCENTAJE_ACTAS_INCONSISTENCIAS].values)
+if np.array_equal(value_counts7, actas_incon_por):
+    print("[green]8.- Los valores de PORCENTAJE_ACTAS_INCONSISTENCIAS coinciden:[/green]", actas_incon_por)
 else:
-    print("[red]8.- Los valores de PORCENTAJE_ACTAS_INCONSISTENCIAS no coinciden.[/red]", df1[PORCENTAJE_ACTAS_INCONSISTENCIAS].values, "vs", value_counts7)
+    print("[red]8.- Los valores de PORCENTAJE_ACTAS_INCONSISTENCIAS no coinciden.[/red]", actas_incon_por, "vs", value_counts7)
 
-if np.array_equal(value_counts2, df1[ACTAS_NO_CONTABILIZADAS].values):
-    print("[green]9.- Los valores de ACTAS_NO_CONTABILIZADAS coinciden:[/green]", df1[ACTAS_NO_CONTABILIZADAS].values)
+@allure.feature('Validación de datos CSV Publicación')  # Usa etiquetas estándar de Allure
+@allure.story('8.- Validación de Porcentaje de Actas con Inconcistencias')  # Usa etiquetas estándar de Allure
+@allure.tag('prioridad:alta', 'tipo:funcional')
+def test_actas_porcentaje_inconsistencias_coinciden():
+    """
+    Prueba que los valores de PORCENTAJE_ACTAS_INCONSISTENCIAS coincidan con los valores esperados.
+    """
+    with allure.step("Comparando los valores de PORCENTAJE_ACTAS_INCONSISTENCIAS con los esperados"):
+        if np.array_equal(value_counts7, actas_incon_por):
+            allure.attach(
+                f"8.- Los valores de PORCENTAJE_ACTAS_INCONSISTENCIAS coinciden: {actas_incon_por}",
+                name="Resultado de la validación",
+                attachment_type=allure.attachment_type.TEXT
+            )
+        else:
+            allure.attach(
+                f"8.- Los valores de PORCENTAJE_ACTAS_INCONSISTENCIAS no coinciden. {actas_incon_por} vs {value_counts7}",
+                name="Resultado de la validación",
+                attachment_type=allure.attachment_type.TEXT
+            )
+        assert np.array_equal(value_counts7, actas_incon_por), (
+            "Los valores no coinciden. Revisa el reporte para más detalles."
+        )
+
+if np.array_equal(value_counts2, actas_nocon):
+    print("[green]9.- Los valores de ACTAS_NO_CONTABILIZADAS coinciden:[/green]", actas_nocon)
 else:
-    print("[red]9.- Los valores de ACTAS_NO_CONTABILIZADAS no coinciden.[/red]", df1[ACTAS_NO_CONTABILIZADAS].values)
+    print("[red]9.- Los valores de ACTAS_NO_CONTABILIZADAS no coinciden.[/red]", actas_nocon)
     print(value_counts2)
 
-if np.array_equal(value_counts8, df1[LISTA_NOMINAL_ACTAS_CONTABILIZADAS].values):
-    print("[green]10.- Los valores de LISTA_NOMINAL_ACTAS_CONTABILIZADAS coinciden:[/green]", df1[LISTA_NOMINAL_ACTAS_CONTABILIZADAS].values)
+@allure.feature('Validación de datos CSV Publicación')  # Usa etiquetas estándar de Allure
+@allure.story('9.- Validación de Actas No Contabilizadas')  # Usa etiquetas estándar de Allure
+@allure.tag('prioridad:alta', 'tipo:funcional')
+def test_actas_no_contabilizadas_coinciden():
+    """
+    Prueba que los valores de ACTAS_NO_CONTABILIZADAS coincidan con los valores esperados.
+    """
+    with allure.step("Comparando los valores de ACTAS_NO_CONTABILIZADAS con los esperados"):
+        if np.array_equal(value_counts2, actas_nocon):
+            allure.attach(
+                f"9.- Los valores de ACTAS_NO_CONTABILIZADAS coinciden: {actas_nocon}",
+                name="Resultado de la validación",
+                attachment_type=allure.attachment_type.TEXT
+            )
+        else:
+            allure.attach(
+                f"9.- Los valores de ACTAS_NO_CONTABILIZADAS no coinciden. {actas_nocon} vs {value_counts2}",
+                name="Resultado de la validación",
+                attachment_type=allure.attachment_type.TEXT
+            )
+        assert np.array_equal(value_counts2, actas_nocon), (
+            "Los valores no coinciden. Revisa el reporte para más detalles."
+        )
+
+if np.array_equal(value_counts8, lnactascon):
+    print("[green]10.- Los valores de LISTA_NOMINAL_ACTAS_CONTABILIZADAS coinciden:[/green]", lnactascon)
 else:
-    print("[red]10.- Los valores de LISTA_NOMINAL_ACTAS_CONTABILIZADAS no coinciden.[/red]", df1[LISTA_NOMINAL_ACTAS_CONTABILIZADAS].values)
+    print("[red]10.- Los valores de LISTA_NOMINAL_ACTAS_CONTABILIZADAS no coinciden.[/red]", lnactascon)
     print(value_counts8)
 
-if np.array_equal(value_counts10, df1[TOTAL_VOTOS_C_CS].values):
-    print("[green]11.- Los valores de TOTAL_VOTOS_C_CS coinciden:[/green]", df1[TOTAL_VOTOS_C_CS].values)
+@allure.feature('Validación de datos CSV Publicación')  # Usa etiquetas estándar de Allure
+@allure.story('10.- Validación de Lista Nominal de Actas Contabilizadas')  # Usa etiquetas estándar de Allure
+@allure.tag('prioridad:alta', 'tipo:funcional')
+def test_lista_nominal_actas_contabilizadas_coinciden():
+    """
+    Prueba que los valores de LISTA_NOMINAL_ACTAS_CONTABILIZADAS coincidan con los valores esperados.
+    """
+    with allure.step("Comparando los valores de LISTA_NOMINAL_ACTAS_CONTABILIZADAS con los esperados"):
+        if np.array_equal(value_counts8, lnactascon):
+            allure.attach(
+                f"10.- Los valores de LISTA_NOMINAL_ACTAS_CONTABILIZADAS coinciden: {lnactascon}",
+                name="Resultado de la validación",
+                attachment_type=allure.attachment_type.TEXT
+            )
+        else:
+            allure.attach(
+                f"10.- Los valores de LISTA_NOMINAL_ACTAS_CONTABILIZADAS no coinciden. {lnactascon} vs {value_counts8}",
+                name="Resultado de la validación",
+                attachment_type=allure.attachment_type.TEXT
+            )
+        assert np.array_equal(value_counts8, lnactascon), (
+            "Los valores no coinciden. Revisa el reporte para más detalles."
+        )
+
+if np.array_equal(value_counts10, totalvotosc):
+    print("[green]11.- Los valores de TOTAL_VOTOS_C_CS coinciden:[/green]", totalvotosc)
 else:
-    print("[red]11.- Los valores de TOTAL_VOTOS_C_CS no coinciden.[/red]", df1[TOTAL_VOTOS_C_CS].values)
+    print("[red]11.- Los valores de TOTAL_VOTOS_C_CS no coinciden.[/red]", totalvotosc)
     print(value_counts10)
 
-if np.array_equal(value_counts11, df1[TOTAL_VOTOS_S_CS].values):
-    print("[green]12.- Los valores de TOTAL_VOTOS_S_CS coinciden:[/green]", df1[TOTAL_VOTOS_S_CS].values)
+@allure.feature('Validación de datos CSV Publicación')  # Usa etiquetas estándar de Allure
+@allure.story('11.- Validación de Total Votos C_CS')  # Usa etiquetas estándar de Allure
+@allure.tag('prioridad:alta', 'tipo:funcional')
+def test_total_votos_c_cs_coinciden():
+    """
+    Prueba que los valores de TOTAL_VOTOS_C_CS coincidan con los valores esperados.
+    """
+    with allure.step("Comparando los valores de TOTAL_VOTOS_C_CS con los esperados"):
+        if np.array_equal(value_counts10, totalvotosc):
+            allure.attach(
+                f"11.- Los valores de TOTAL_VOTOS_C_CS coinciden: {totalvotosc}",
+                name="Resultado de la validación",
+                attachment_type=allure.attachment_type.TEXT
+            )
+        else:
+            allure.attach(
+                f"11.- Los valores de TOTAL_VOTOS_C_CS no coinciden. {totalvotosc} vs {value_counts10}",
+                name="Resultado de la validación",
+                attachment_type=allure.attachment_type.TEXT
+            )
+        assert np.array_equal(value_counts10, totalvotosc), (
+            "Los valores no coinciden. Revisa el reporte para más detalles."
+        )
+
+if np.array_equal(value_counts11, totalvotoss):
+    print("[green]12.- Los valores de TOTAL_VOTOS_S_CS coinciden:[/green]", totalvotoss)
 else:
-    print("[red]12.- Los valores de TOTAL_VOTOS_S_CS no coinciden.[/red]", df1[TOTAL_VOTOS_S_CS].values)
+    print("[red]12.- Los valores de TOTAL_VOTOS_S_CS no coinciden.[/red]", totalvotoss)
     print(value_counts11)
 
-if np.array_equal(value_counts9, df1[PORCENTAJE_PARTICIPACION_CIUDADANA].values):
-    print("[green]13.- Los valores de PORCENTAJE_PARTICIPACION_CIUDADANA coinciden:[/green]", df1[PORCENTAJE_PARTICIPACION_CIUDADANA].values)
+@allure.feature('Validación de datos CSV Publicación')  # Usa etiquetas estándar de Allure
+@allure.story('12.- Validación de Total de Votos S_CS')  # Usa etiquetas estándar de Allure
+@allure.tag('prioridad:alta', 'tipo:funcional')
+def test_total_votos_s_cs_coinciden():
+    """
+    Prueba que los valores de TOTAL_VOTOS_S_CS coincidan con los valores esperados.
+    """
+    with allure.step("Comparando los valores de TOTAL_VOTOS_S_CS con los esperados"):
+        if np.array_equal(value_counts11, totalvotoss):
+            allure.attach(
+                f"12.- Los valores de TOTAL_VOTOS_S_CS coinciden: {totalvotoss}",
+                name="Resultado de la validación",
+                attachment_type=allure.attachment_type.TEXT
+            )
+        else:
+            allure.attach(
+                f"12.- Los valores de TOTAL_VOTOS_S_CS no coinciden. {totalvotoss} vs {value_counts11}",
+                name="Resultado de la validación",
+                attachment_type=allure.attachment_type.TEXT
+            )
+        assert np.array_equal(value_counts11, totalvotoss), (
+            "Los valores no coinciden. Revisa el reporte para más detalles."
+        )
+
+if np.array_equal(value_counts9, participacionciu):
+    print("[green]13.- Los valores de PORCENTAJE_PARTICIPACION_CIUDADANA coinciden:[/green]", participacionciu)
 else:
-    print("[red]13.- Los valores de PORCENTAJE_PARTICIPACION_CIUDADANA no coinciden.[/red]", df1[PORCENTAJE_PARTICIPACION_CIUDADANA].values)
+    print("[red]13.- Los valores de PORCENTAJE_PARTICIPACION_CIUDADANA no coinciden.[/red]", participacionciu)
     print(value_counts9)
+
+@allure.feature('Validación de datos CSV Publicación')  # Usa etiquetas estándar de Allure
+@allure.story('13.- Validación de Porcentaje de Participación Ciudadana')  # Usa etiquetas estándar de Allure
+@allure.tag('prioridad:alta', 'tipo:funcional')
+def test_porcentaje_participacion_ciudadana_coinciden():
+    """
+    Prueba que los valores de PORCENTAJE_PARTICIPACION_CIUDADANA coincidan con los valores esperados.
+    """
+    with allure.step("Comparando los valores de PORCENTAJE_PARTICIPACION_CIUDADANA con los esperados"):
+        if np.array_equal(value_counts9, participacionciu):
+            allure.attach(
+                f"13.- Los valores de PORCENTAJE_PARTICIPACION_CIUDADANA coinciden: {participacionciu}",
+                name="Resultado de la validación",
+                attachment_type=allure.attachment_type.TEXT
+            )
+        else:
+            allure.attach(
+                f"13.- Los valores de PORCENTAJE_PARTICIPACION_CIUDADANA no coinciden. {participacionciu} vs {value_counts9}",
+                name="Resultado de la validación",
+                attachment_type=allure.attachment_type.TEXT
+            )
+        assert np.array_equal(value_counts9, participacionciu), (
+            "Los valores no coinciden. Revisa el reporte para más detalles."
+        )

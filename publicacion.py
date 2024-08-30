@@ -10,6 +10,8 @@ import time
 import re
 import os
 from PIL import Image
+import pytest
+import allure
 
 def get_next_screenshot_path(folder, base_filename):
     """Genera el siguiente nombre de archivo disponible con un número consecutivo."""
@@ -153,6 +155,34 @@ try:
         print("1.- El número de actas esperadas en Estadística Nacional coincide con el CSV.",valor_con_comas2)
     else:
         print("1.- El número de actas esperadas en Estadística Nacional no coincide con el CSV.",valor_con_comas2)  
+
+    @allure.feature('Validación de datos CSV Publicación')  # Usa etiquetas estándar de Allure
+    @allure.story('13.- Validación de Porcentaje de Participación Ciudadana')  # Usa etiquetas estándar de Allure
+    @allure.tag('prioridad:alta', 'tipo:funcional')
+
+    @allure.feature('Validación de datos en sitio de Publicación')  # Usa etiquetas estándar de Allure
+    @allure.story('1.- Validación de número de actas esperadas en Estadística Nacional')  # Usa etiquetas estándar de Allure
+    @allure.tag('prioridad:alta', 'tipo:funcional')
+    def test_actas_esperadas_estadistica_acional_coinciden():
+        """
+        Prueba que los valores de actas esperadas en Estadística Nacional coincidan con los valores del CSV.
+        """
+        with allure.step("Comparando los valores de actas esperadas en Estadística Nacional con los esperados"):
+            if valor_en_pagina3 == valor_con_comas2:
+                allure.attach(
+                    f"2.- Los valores de actas esperadas en Estadística Nacional coinciden: {valor_con_comas2}",
+                    name="Resultado de la validación",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+            else:
+                allure.attach(
+                    f"2.- Los valores de actas esperadas en Estadística Nacional no coinciden. {valor_con_comas2} vs {valor_en_pagina3}",
+                    name="Resultado de la validación",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+            assert valor_en_pagina3 == valor_con_comas2, (
+                "Los valores no coinciden. Revisa el reporte para más detalles."
+            )
 
     if valor_en_pagina == valor_con_comas:
         print("4.- El número de actas capturadas en Avance Nacional coincide con el CSV.",valor_con_comas)
