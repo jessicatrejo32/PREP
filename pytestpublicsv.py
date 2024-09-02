@@ -12,6 +12,7 @@ import os
 from PIL import Image
 import pytest
 import allure
+import csv
 
 
 # Crear la carpeta 'screenshots' si no existe
@@ -42,28 +43,35 @@ def capture_full_page_screenshot(driver, file_path2):
     driver.save_screenshot(file_path2)
     #print(f'Captura de pantalla completa guardada en {file_path}')
 
-def capture_element_screenshot(driver, element, file_path):
+def capture_element_screenshot(driver, element, file_path, margin=10):
     """Captura una captura de pantalla de un elemento específico, manejando el desplazamiento."""
     # Obtener la ubicación y el tamaño del elemento
-    location = element.location
+    location = element.location_once_scrolled_into_view
     size = element.size
+
+    # Abrir la captura de pantalla y recortar el área del elemento
+    left = location['x'] - margin
+    top = location['y'] - margin
+    right = location['x'] + size['width'] + margin
+    bottom = location['y'] + size['height'] + margin
 
     # Tomar la captura de pantalla de toda la página
     screenshot_path = 'temp_screenshot.png'
     driver.save_screenshot(screenshot_path)
 
-    # Abrir la captura de pantalla y recortar el área del elemento
     image = Image.open(screenshot_path)
-    left = location['x']
-    top = location['y']
-    right = location['x'] + size['width']
-    bottom = location['y'] + size['height']
-
     image = image.crop((left, top, right, bottom))
     image.save(file_path)
     if os.path.exists(screenshot_path):
             os.remove(screenshot_path)  # Eliminar el archivo temporal
     #print(f'Captura de pantalla del elemento guardada en {file_path}')
+
+# Función para leer datos desde el CSV y eliminar el BOM si está presente
+def leer_datos_csv(filepath):
+    df = pd.read_csv(filepath, encoding='utf-8-sig')
+
+    for index, row in df.iterrows():
+        yield row['allure_story'], row['valor'], row['selector'], row['ruta']
 
 @pytest.fixture
 def setup():
@@ -92,102 +100,51 @@ def setup():
 
 @pytest.fixture
 def df():
-    # Cargar tu DataFrame aquí
-    # Por ejemplo:
-    import pandas as pd
     # Leer el archivo CSV en un DataFrame
     csv_path = '/var/jenkins_home/workspace/Publicacion/Archivos/PRES_2024.csv'
-    df = pd.read_csv(csv_path, skiprows=3, nrows=1, header=None, names=["ACTAS_ESPERADAS","ACTAS_REGISTRADAS","ACTAS_FUERA_CATALOGO","ACTAS_CAPTURADAS","PORCENTAJE_ACTAS_CAPTURADAS","ACTAS_CONTABILIZADAS","PORCENTAJE_ACTAS_CONTABILIZADAS","PORCENTAJE_ACTAS_INCONSISTENCIAS","ACTAS_NO_CONTABILIZADAS","LISTA_NOMINAL_ACTAS_CONTABILIZADAS","TOTAL_VOTOS_C_CS","TOTAL_VOTOS_S_CS","PORCENTAJE_PARTICIPACION_CIUDADANA"])
+    df = pd.read_csv(csv_path, skiprows=3, nrows=1, header=None, names=[
+        "ACTAS_ESPERADAS", "ACTAS_REGISTRADAS", "ACTAS_FUERA_CATALOGO", 
+        "ACTAS_CAPTURADAS", "PORCENTAJE_ACTAS_CAPTURADAS", 
+        "ACTAS_CONTABILIZADAS", "PORCENTAJE_ACTAS_CONTABILIZADAS", 
+        "PORCENTAJE_ACTAS_INCONSISTENCIAS", "ACTAS_NO_CONTABILIZADAS", 
+        "LISTA_NOMINAL_ACTAS_CONTABILIZADAS", "TOTAL_VOTOS_C_CS", 
+        "TOTAL_VOTOS_S_CS", "PORCENTAJE_PARTICIPACION_CIUDADANA"
+    ])
 
-    # Mapeo de las columnas conteos
-    ACTAS_ESPERADAS = 'ACTAS_ESPERADAS'
-    ACTAS_REGISTRADAS = 'ACTAS_REGISTRADAS'
-    ACTAS_FUERA_CATALOGO = 'ACTAS_FUERA_CATALOGO'
-    ACTAS_CAPTURADAS = 'ACTAS_CAPTURADAS'
-    PORCENTAJE_ACTAS_CAPTURADAS = 'PORCENTAJE_ACTAS_CAPTURADAS'
-    ACTAS_CONTABILIZADAS = 'ACTAS_CONTABILIZADAS'
-    PORCENTAJE_ACTAS_CONTABILIZADAS = 'PORCENTAJE_ACTAS_CONTABILIZADAS'
-    PORCENTAJE_ACTAS_INCONSISTENCIAS = 'PORCENTAJE_ACTAS_INCONSISTENCIAS'
-    ACTAS_NO_CONTABILIZADAS = 'ACTAS_NO_CONTABILIZADAS'
-    LISTA_NOMINAL_ACTAS_CONTABILIZADAS = 'LISTA_NOMINAL_ACTAS_CONTABILIZADAS'
-    TOTAL_VOTOS_C_CS = 'TOTAL_VOTOS_C_CS'
-    TOTAL_VOTOS_S_CS = 'TOTAL_VOTOS_S_CS'
-    PORCENTAJE_PARTICIPACION_CIUDADANA = 'PORCENTAJE_PARTICIPACION_CIUDADANA'
-    return pd.DataFrame(df)
+    # Retornar solo las columnas necesarias en un nuevo DataFrame
+    selected_columns = df[[
+        "ACTAS_ESPERADAS", "ACTAS_CAPTURADAS", "TOTAL_VOTOS_C_CS"
+    ]]
+
+    return selected_columns
 
 @pytest.fixture
 def screenshots_folder():
     # Define la ruta de la carpeta donde almacenarás las capturas de pantalla
     return "screenshots_publi"
 
-@allure.feature('Validación de datos en sitio de Publicación - 2')
-@allure.story('1.- Validación de número de actas capturadas en Avance Nacional')
-@allure.tag('prioridad:alta', 'tipo:funcional')
-def test_actas_capturadas_avance_nacional_coinciden(setup, df, screenshots_folder):
-    valor_csv = "{:,.0f}".format(int("".join(str(x) for x in df['ACTAS_CAPTURADAS'].astype(int).values)))
+@pytest.mark.parametrize("allure_story, valor, selector, ruta", leer_datos_csv('elementos.csv'))
+@allure.feature('Validación de datos en sitio de Publicación')
+def test_validacion_datos(setup, df, allure_story, valor, selector, ruta, screenshots_folder):
+    """
+    Prueba que los valores de actas esperadas en Estadística Nacional coincidan con los valores del CSV.
+    """
+    # Aplicar la etiqueta @allure.story dinámicamente
+    allure.dynamic.story(allure_story)  # Etiqueta dinámica basada en el CSV
 
+    # Establecer un título dinámico para la prueba
+    allure.dynamic.title(allure_story)
+
+    valor_csv = "{:,.0f}".format(int(df[valor].iloc[0]))
+
+    # Convertir el tipo de localizador a su objeto correspondiente de Selenium
+    locator_type_obj = eval(selector)
+    
     driver = setup
-    elemento = driver.find_element(By.XPATH, "/html/body/app-root/app-federal/div/div/div[1]/app-avance/div/div[3]/div/div/div/div[2]/strong")
+    elemento = driver.find_element(locator_type_obj, ruta)
     valor_en_pagina = elemento.text
 
     file_path = get_next_screenshot_path(screenshots_folder, 'actas_esperadas_avance_nacional')
-    capture_element_screenshot(driver, elemento, file_path)
-
-    file_path2 = get_next_screenshot_path(screenshots_folder, 'pagina_completa')
-    capture_full_page_screenshot(driver, file_path2)
-    
-    with allure.step("Comparando los valores de sitio vs csv"):
-        if valor_en_pagina == valor_csv:
-            allure.attach(
-                f"1.- Los valores coinciden, Sitio: {valor_en_pagina} CSV: {valor_csv}",
-                name="Resultado de la validación",
-                attachment_type=allure.attachment_type.TEXT
-            )
-            with open(file_path, "rb") as image_file:
-                allure.attach(
-                    image_file.read(),
-                    name="Captura de pantalla del elemento",
-                    attachment_type=allure.attachment_type.PNG
-                )
-            with open(file_path2, "rb") as image_file:
-                allure.attach(
-                    image_file.read(),
-                    name="Captura de pantalla completa",
-                    attachment_type=allure.attachment_type.PNG
-                )
-        else:
-            allure.attach(
-                f"1.- Los valores no coinciden, Sitio: {valor_en_pagina} CSV: {valor_csv}",
-                name="Resultado de la validación",
-                attachment_type=allure.attachment_type.TEXT
-            )
-            with open(file_path, "rb") as image_file:
-                allure.attach(
-                    image_file.read(),
-                    name="Captura de pantalla del error",
-                    attachment_type=allure.attachment_type.PNG
-                )
-            with open(file_path2, "rb") as image_file:
-                allure.attach(
-                    image_file.read(),
-                    name="Captura de pantalla completa",
-                    attachment_type=allure.attachment_type.PNG
-                )
-        assert valor_en_pagina == valor_csv, (
-            "Los valores no coinciden. Revisa el reporte para más detalles."
-        )
-
-@allure.feature('Validación de datos en sitio de Publicación - 2')
-@allure.story('2.- Validación de número de actas esperadas en Estadística Nacional')
-@allure.tag('prioridad:alta', 'tipo:funcional')
-def test_actas_esperadas_estadistica_nacional_coinciden(setup, df, screenshots_folder):
-    valor_csv = "{:,.0f}".format(int("".join(str(x) for x in df['ACTAS_ESPERADAS'].astype(int).values)))
-
-    driver = setup
-    elemento = driver.find_element(By.XPATH, "/html/body/app-root/app-federal/div/div/div[3]/app-nacional/div/app-estadistica/div[1]/div[1]/div[2]/div[1]/p[1]/strong")
-    valor_en_pagina = elemento.text
-
-    file_path = get_next_screenshot_path(screenshots_folder, 'actas_esperadas')
     capture_element_screenshot(driver, elemento, file_path)
 
     file_path2 = get_next_screenshot_path(screenshots_folder, 'pagina_completa')
