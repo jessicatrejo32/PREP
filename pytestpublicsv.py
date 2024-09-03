@@ -144,8 +144,7 @@ def test_validacion_datos(setup, df, allure_story, valor, selector, ruta, screen
     # Multiplicamos por 100 para convertir el porcentaje a un número entero (p.ej., 93.1765% se convierte en 9317)
     df['PORCENTAJE_ACTAS_CONTABILIZADAS'] = (df['PORCENTAJE_ACTAS_CONTABILIZADAS'] * 100).astype(int)
     
-    # Formatear el valor entero con separadores de miles
-    df['PORCENTAJE_ACTAS_CONTABILIZADAS'] = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].apply(lambda x: "{:,}".format(x))
+  
 
     # Convertir el tipo de localizador a su objeto correspondiente de Selenium
     locator_type_obj = eval(selector)
