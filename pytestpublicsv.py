@@ -113,7 +113,8 @@ def df():
     df['PORCENTAJE_ACTAS_CONTABILIZADAS'] = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].apply(lambda x: f'{x:.4f}%')
     # Retornar solo las columnas necesarias en un nuevo DataFrame
     selected_columns = df[[
-        "ACTAS_ESPERADAS", "ACTAS_CAPTURADAS","PORCENTAJE_ACTAS_CONTABILIZADAS"
+        #"ACTAS_ESPERADAS", "ACTAS_CAPTURADAS","PORCENTAJE_ACTAS_CONTABILIZADAS"
+        "PORCENTAJE_ACTAS_CONTABILIZADAS"        
     ]]
 
     return selected_columns
