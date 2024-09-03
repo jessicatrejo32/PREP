@@ -1,5 +1,5 @@
-﻿﻿allure_story,valor,selector,ruta
-Validación de número de actas capturadas en Avance Nacional,ACTAS_CAPTURADAS,By.XPATH,/html/body/app-root/app-federal/div/div/div[1]/app-avance/div/div[3]/div/div/div/div[2]/strong
+﻿allure_story,valor,selector,ruta
+Validación de número de actas capturadas en Avance Nacional,ACTAS_ESPERADAS,By.XPATH,/html/body/app-root/app-federal/div/div/div[1]/app-avance/div/div[3]/div/div/div/div[2]/strong
 Validación de número de actas esperadas en Estadística Nacional,ACTAS_ESPERADAS,By.XPATH,/html/body/app-root/app-federal/div/div/div[3]/app-nacional/div/app-estadistica/div[1]/div[1]/div[2]/div[1]/p[1]/strong
 Validacion de Lista Nominal de las casillas con Actas Contabilizadas,LISTA_NOMINAL_ACTAS_CONTABILIZADAS,By.XPATH,/html/body/app-root/app-federal/div/div/div[3]/app-nacional/div/app-estadistica/div[2]/div[1]/div[2]/div/div/div/div/div/span/div/span[2]
 Validación de número de actas capturadas en Estadística Nacional,ACTAS_CAPTURADAS,By.XPATH,/html/body/app-root/app-federal/div/div/div[3]/app-nacional/div/app-estadistica/div[1]/div[1]/div[2]/div[2]/p[1]/strong
@@ -7,4 +7,3 @@ Validación de número de actas contabilizadas en Estadística Nacional,ACTAS_CO
 Validación de Total de Votos en Casillas Básicas Contiguas Extraordinarias y Mesas de Escrutinio,TOTAL_VOTOS_S_CS, By.XPATH,/html/body/app-root/app-federal/div/div/div[3]/app-nacional/div/app-estadistica/div[2]/div[2]/div/div[1]/div[2]/strong[1]
 Validación de Total de Votos,TOTAL_VOTOS_C_CS, By.XPATH,/html/body/app-root/app-federal/div/div/div[3]/app-nacional/div/app-estadistica/div[2]/div[2]/div/div[3]/div[2]/div/div[2]/strong[1]
 Validacion de Lista Nominal de las casillas con Actas Contabilizadas en Participacion ciudadadana,LISTA_NOMINAL_ACTAS_CONTABILIZADAS,By.XPATH,/html/body/app-root/app-federal/div/div/div[3]/app-nacional/div/app-porcentaje-participacion/div/div/div/div/div[1]/div/div[1]/div[2]/p[1]
-Validacion de Porcentaje de Participacion ciudadadana,PORCENTAJE_ACTAS_CONTABILIZADAS,By.XPATH,/html/body/app-root/app-federal/div/div/div[3]/app-nacional/div/app-estadistica/div[1]/div[1]/div[2]/div[3]/p[2]
