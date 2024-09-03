@@ -136,7 +136,7 @@ def test_validacion_datos(setup, df, allure_story, valor, selector, ruta, screen
     allure.dynamic.title(allure_story)
 
     valor_csv = "{:,.0f}".format(int(df[valor].iloc[0]))
-    df['PORCENTAJE_ACTAS_CONTABILIZADAS'] = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].replace('%', '', regex=True.astype(float) / 100
+    df['PORCENTAJE_ACTAS_CONTABILIZADAS'] = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].replace('%', '', regex=True.astype(float) / 100)
     df['PORCENTAJE_ACTAS_CONTABILIZADAS'] = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].apply(lambda x: f'{x:.4f}%')
 
     # Convertir el tipo de localizador a su objeto correspondiente de Selenium
