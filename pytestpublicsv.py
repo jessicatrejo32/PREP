@@ -110,12 +110,13 @@ def df():
         "LISTA_NOMINAL_ACTAS_CONTABILIZADAS", "TOTAL_VOTOS_C_CS", 
         "TOTAL_VOTOS_S_CS", "PORCENTAJE_PARTICIPACION_CIUDADANA"
     ])
+    df['PORCENTAJE_ACTAS_CONTABILIZADAS'] = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].apply(lambda x: f"{x:.2f}%")
+
+
     # Retornar solo las columnas necesarias en un nuevo DataFrame
     selected_columns = df[[
-        #"ACTAS_ESPERADAS", "ACTAS_CAPTURADAS", "TOTAL_VOTOS_C_CS","PORCENTAJE_ACTAS_CONTABILIZADAS"
-
+        "ACTAS_ESPERADAS", "ACTAS_CAPTURADAS", "TOTAL_VOTOS_C_CS","PORCENTAJE_ACTAS_CONTABILIZADAS"
     ]]
-    df['PORCENTAJE_ACTAS_CONTABILIZADAS'] = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].apply(lambda x: f"{x:.2f}%")
 
     return selected_columns
 
@@ -138,8 +139,6 @@ def test_validacion_datos(setup, df, allure_story, valor, selector, ruta, screen
 
     valor_csv = "{:,.0f}".format(int(df[valor].iloc[0]))
 
-
-    #valor_csv = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].str.replace('%', '', regex=False)
     # Convertir el tipo de localizador a su objeto correspondiente de Selenium
     locator_type_obj = eval(selector)
     
