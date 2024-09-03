@@ -111,7 +111,6 @@ def df():
         "TOTAL_VOTOS_S_CS", "PORCENTAJE_PARTICIPACION_CIUDADANA"
     ])
     df['PORCENTAJE_ACTAS_CONTABILIZADAS'] = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].apply(lambda x: f"{x:.2f}%")
-
     # Retornar solo las columnas necesarias en un nuevo DataFrame
     selected_columns = df[[
         #"ACTAS_ESPERADAS", "ACTAS_CAPTURADAS", "TOTAL_VOTOS_C_CS","PORCENTAJE_ACTAS_CONTABILIZADAS"
@@ -137,7 +136,7 @@ def test_validacion_datos(setup, df, allure_story, valor, selector, ruta, screen
     # Establecer un título dinámico para la prueba
     allure.dynamic.title(allure_story)
 
-    valor_csv = df
+    valor_csv = "{:,.0f}".format(int(df[valor].iloc[0]))
 
 
     #valor_csv = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].str.replace('%', '', regex=False)
