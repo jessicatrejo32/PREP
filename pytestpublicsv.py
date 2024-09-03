@@ -143,7 +143,7 @@ def test_validacion_datos(setup, df, allure_story, valor, selector, ruta, screen
     df['PORCENTAJE_ACTAS_CONTABILIZADAS'] = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].str.replace('%', '').astype(float)
     
     # Convertir los valores flotantes a enteros
-    df['PORCENTAJE_ACTAS_CONTABILIZADAS'] = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].round().astype(int)
+   # df['PORCENTAJE_ACTAS_CONTABILIZADAS'] = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].round().astype(int)
     
     # Mostrar el DataFrame para verificar los resultados
     print(df)
