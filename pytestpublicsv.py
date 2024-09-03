@@ -117,13 +117,14 @@ def df():
         "TOTAL_VOTOS_S_CS"
     ])
 
-df['PORCENTAJE_ACTAS_CONTABILIZADAS'] = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].astype(str).str.replace('.', '', regex=False)
+
 
     # Retornar solo las columnas necesarias en un nuevo DataFrame
     selected_columns = df[[
         "ACTAS_ESPERADAS", "ACTAS_CAPTURADAS", "ACTAS_CONTABILIZADAS", "LISTA_NOMINAL_ACTAS_CONTABILIZADAS", "TOTAL_VOTOS_C_CS", "TOTAL_VOTOS_S_CS", "PORCENTAJE_ACTAS_CONTABILIZADAS"
     ]]
-
+    for column in selected_columns.columns:
+    selected_columns[PORCENTAJE_ACTAS_CONTABILIZADAS] = selected_columns[PORCENTAJE_ACTAS_CONTABILIZADAS].astype(str).str.replace('.', '', regex=False)
     return selected_columns
 
 @pytest.fixture
