@@ -8,7 +8,7 @@ pipeline {
             steps {
                 deleteDir()
                 //Clonar el repositorio Git
-                git url: 'https://github.com/ericruizINE/descargaCSV.git', branch: 'main'
+                git url: 'https://github.com/jessicatrejo32/PREP.git', branch: 'main'
             }
         }
         stage('Install & Setup venv') {
