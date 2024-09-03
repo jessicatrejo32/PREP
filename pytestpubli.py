@@ -188,7 +188,7 @@ def test_actas_esperadas_estadistica_nacional_coinciden(setup, df, screenshots_f
     valor_en_pagina = elemento.text
 
     file_path = get_next_screenshot_path(screenshots_folder, 'actas_esperadas')
-    capture_element_screenshot("arguments[0].style.color = 'red';",driver,elemento, file_path)
+    capture_element_screenshot(driver, elemento, file_path)
 
     file_path2 = get_next_screenshot_path(screenshots_folder, 'pagina_completa')
     capture_full_page_screenshot(driver, file_path2)
