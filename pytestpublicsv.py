@@ -104,7 +104,7 @@ def df():
     csv_path = '/var/jenkins_home/workspace/Publicacion/Archivos/PRES_2024.csv'
     df = pd.read_csv(csv_path, skiprows=3, nrows=1, header=None, names=[
       
-       "PORCENTAJE_ACTAS_CONTABILIZADAS", 
+       "PORCENTAJE_ACTAS_CONTABILIZADAS"
    
     ])
     df['PORCENTAJE_ACTAS_CONTABILIZADAS'] = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].apply(lambda x: f"{x:.4f}%")
@@ -112,7 +112,7 @@ def df():
 
     # Retornar solo las columnas necesarias en un nuevo DataFrame
     selected_columns = df[[
-        "ACTAS_ESPERADAS", "ACTAS_CAPTURADAS", "TOTAL_VOTOS_C_CS","PORCENTAJE_ACTAS_CONTABILIZADAS"
+    "PORCENTAJE_ACTAS_CONTABILIZADAS"
     ]]
 
     return selected_columns
