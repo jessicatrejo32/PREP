@@ -103,9 +103,12 @@ def df():
     # Leer el archivo CSV en un DataFrame
     csv_path = '/var/jenkins_home/workspace/Publicacion/Archivos/PRES_2024.csv'
     df = pd.read_csv(csv_path, skiprows=3, nrows=1, header=None, names=[
-      
-       "PORCENTAJE_ACTAS_CONTABILIZADAS"
-   
+        "ACTAS_ESPERADAS", "ACTAS_REGISTRADAS", "ACTAS_FUERA_CATALOGO", 
+        "ACTAS_CAPTURADAS", "PORCENTAJE_ACTAS_CAPTURADAS", 
+        "ACTAS_CONTABILIZADAS", "PORCENTAJE_ACTAS_CONTABILIZADAS", 
+        "PORCENTAJE_ACTAS_INCONSISTENCIAS", "ACTAS_NO_CONTABILIZADAS", 
+        "LISTA_NOMINAL_ACTAS_CONTABILIZADAS", "TOTAL_VOTOS_C_CS", 
+        "TOTAL_VOTOS_S_CS", "PORCENTAJE_PARTICIPACION_CIUDADANA"
     ])
     df['PORCENTAJE_ACTAS_CONTABILIZADAS'] = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].apply(lambda x: f"{x:.4f}%")
 
