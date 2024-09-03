@@ -123,11 +123,6 @@ def df():
     selected_columns = df[[
         "ACTAS_ESPERADAS", "ACTAS_CAPTURADAS", "ACTAS_CONTABILIZADAS", "LISTA_NOMINAL_ACTAS_CONTABILIZADAS", "TOTAL_VOTOS_C_CS", "TOTAL_VOTOS_S_CS", "PORCENTAJE_ACTAS_CONTABILIZADAS"
     ]]
-    for column in selected_columns.columns:
-        # Eliminar los puntos solo de la columna 'PORCENTAJE_ACTAS_CONTABILIZADAS'
-        if column == 'PORCENTAJE_ACTAS_CONTABILIZADAS':
-            selected_columns[column] = selected_columns[column].astype(str).str.replace('.', '', regex=False)
-    
     return selected_columns
 
 @pytest.fixture
