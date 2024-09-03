@@ -137,7 +137,7 @@ def test_validacion_datos(setup, df, allure_story, valor, selector, ruta, screen
     allure.dynamic.title(allure_story)
 
     #valor_csv = "{:,.0f}".format(float(df[valor].iloc[0]).replace('%', '', regex=True))
-    valor_csv= df.replace('%', '', regex=True)
+    valor_csv= df.str.replace('%', '', regex=False)
     valor_csv = df.astype(float)
 
     # Convertir el tipo de localizador a su objeto correspondiente de Selenium
