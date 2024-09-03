@@ -134,6 +134,9 @@ def test_validacion_datos(setup, df, allure_story, valor, selector, ruta, screen
 
     # Establecer un título dinámico para la prueba
     allure.dynamic.title(allure_story)
+
+    valor_csv = "{:,.0f}".format(int(df[valor].iloc[0]))
+
     # Paso 1: Eliminar el símbolo '%' y convertir a flotante
     df['PORCENTAJE_ACTAS_CONTABILIZADAS'] = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].replace('%', '', regex=True).astype(float) / 100
     
@@ -142,10 +145,7 @@ def test_validacion_datos(setup, df, allure_story, valor, selector, ruta, screen
     df['PORCENTAJE_ACTAS_CONTABILIZADAS'] = (df['PORCENTAJE_ACTAS_CONTABILIZADAS'] * 100).astype(int)
     
     # Formatear el valor entero con separadores de miles
-    df['VALOR_FORMATADO'] = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].apply(lambda x: "{:,}".format(x))
-    valor_csv = "{:,.0f}".format(int(df[valor].iloc[0]))
-
-
+    df['PORCENTAJE_ACTAS_CONTABILIZADAS'] = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].apply(lambda x: "{:,}".format(x))
 
     # Convertir el tipo de localizador a su objeto correspondiente de Selenium
     locator_type_obj = eval(selector)
