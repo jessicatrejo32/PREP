@@ -135,7 +135,7 @@ def test_validacion_datos(setup, df, allure_story, valor, selector, ruta, screen
     # Establecer un título dinámico para la prueba
     allure.dynamic.title(allure_story)
 
-    valor_csv = "{:,.0f}".format(string(df[valor].iloc[0]))
+    valor_csv = "{:,.0f}".format(int(df[valor].iloc[0]))
 
   
 
