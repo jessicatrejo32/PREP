@@ -139,7 +139,7 @@ def test_validacion_datos(setup, df, allure_story, valor, selector, ruta, screen
     #valor_csv = "{:,.0f}".format(int(df[valor].iloc[0]))
     valor_csv = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].astype(str)
     valor_csv = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].str.replace('%', '', regex=False)
-    valor_csv = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].astype(float) / 100
+    #valor_csv = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].astype(float) / 100
     valor_csv = df['PORCENTAJE_ACTAS_CONTABILIZADAS'] * 100
     valor_csv = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].round().astype(int)
 
