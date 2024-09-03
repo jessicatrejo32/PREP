@@ -5,6 +5,8 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import chromedriver_autoinstaller
 import time
 import re
@@ -43,28 +45,26 @@ def capture_full_page_screenshot(driver, file_path2):
     driver.save_screenshot(file_path2)
     #print(f'Captura de pantalla completa guardada en {file_path}')
 
-def capture_element_screenshot(driver, element, file_path, margin=10):
-    """Captura una captura de pantalla de un elemento específico, manejando el desplazamiento."""
-    # Obtener la ubicación y el tamaño del elemento
-    location = element.location_once_scrolled_into_view
-    size = element.size
+def capture_element_screenshot(driver, element, file_path):
+    """
+    Captura una captura de pantalla resaltando el elemento específico con un borde.
+    """
+    # Resaltar el elemento usando JavaScript
+    driver.execute_script("arguments[0].style.border='3px solid red'", element)
+    
+    # Desplazar la página hasta que el elemento esté visible
+    driver.execute_script("arguments[0].scrollIntoView();", element)
 
-    # Abrir la captura de pantalla y recortar el área del elemento
-    left = location['x'] - margin
-    top = location['y'] - margin
-    right = location['x'] + size['width'] + margin
-    bottom = location['y'] + size['height'] + margin
+    # Esperar a que el elemento sea visible
+    WebDriverWait(driver, 10).until(
+        EC.visibility_of(element)
+    )
 
-    # Tomar la captura de pantalla de toda la página
-    screenshot_path = 'temp_screenshot.png'
-    driver.save_screenshot(screenshot_path)
+    # Capturar la pantalla completa
+    driver.save_screenshot(file_path)
 
-    image = Image.open(screenshot_path)
-    image = image.crop((left, top, right, bottom))
-    image.save(file_path)
-    if os.path.exists(screenshot_path):
-            os.remove(screenshot_path)  # Eliminar el archivo temporal
-    #print(f'Captura de pantalla del elemento guardada en {file_path}')
+    # Quitar el borde después de la captura
+    #driver.execute_script("arguments[0].style.border=''", element)
 
 # Función para leer datos desde el CSV y eliminar el BOM si está presente
 def leer_datos_csv(filepath):
