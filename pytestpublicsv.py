@@ -136,8 +136,7 @@ def test_validacion_datos(setup, df, allure_story, valor, selector, ruta, screen
     # Establecer un título dinámico para la prueba
     allure.dynamic.title(allure_story)
 
-    valor_csv = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].str.replace('%', '').astype(float)
-
+    valor_csv = df['PORCENTAJE_ACTAS_CONTABILIZADAS']*1000
 
     #valor_csv = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].str.replace('%', '', regex=False)
     # Convertir el tipo de localizador a su objeto correspondiente de Selenium
