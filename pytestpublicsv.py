@@ -135,7 +135,7 @@ def test_validacion_datos(setup, df, allure_story, valor, selector, ruta, screen
     # Establecer un título dinámico para la prueba
     allure.dynamic.title(allure_story)
 
-    valor_csv = "{:,.0f}".format(int(df[valor].iloc[0]))
+    #valor_csv = "{:,.0f}".format(int(df[valor].iloc[0]))
 
     # Paso 1: Eliminar el símbolo '%' y convertir a flotante
     df['PORCENTAJE_ACTAS_CONTABILIZADAS'] = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].replace('%', '', regex=True).astype(float) / 100
@@ -143,7 +143,6 @@ def test_validacion_datos(setup, df, allure_story, valor, selector, ruta, screen
     # Paso 2: Convertir a entero y formatear con separadores de miles
     # Multiplicamos por 100 para convertir el porcentaje a un número entero (p.ej., 93.1765% se convierte en 9317)
     df['PORCENTAJE_ACTAS_CONTABILIZADAS'] = (df['PORCENTAJE_ACTAS_CONTABILIZADAS'] * 100).astype(int)
-    
   
 
     # Convertir el tipo de localizador a su objeto correspondiente de Selenium
