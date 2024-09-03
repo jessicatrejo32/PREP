@@ -110,11 +110,10 @@ def df():
         "LISTA_NOMINAL_ACTAS_CONTABILIZADAS", "TOTAL_VOTOS_C_CS", 
         "TOTAL_VOTOS_S_CS", "PORCENTAJE_PARTICIPACION_CIUDADANA"
     ])
-    df['PORCENTAJE_ACTAS_CONTABILIZADAS'] = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].apply(lambda x: f'{x:.4f}%')
+
     # Retornar solo las columnas necesarias en un nuevo DataFrame
     selected_columns = df[[
-        #"ACTAS_ESPERADAS", "ACTAS_CAPTURADAS","PORCENTAJE_ACTAS_CONTABILIZADAS"
-        "PORCENTAJE_ACTAS_CONTABILIZADAS"        
+        "ACTAS_ESPERADAS", "ACTAS_CAPTURADAS", "TOTAL_VOTOS_C_CS"
     ]]
 
     return selected_columns
@@ -135,25 +134,9 @@ def test_validacion_datos(setup, df, allure_story, valor, selector, ruta, screen
 
     # Establecer un título dinámico para la prueba
     allure.dynamic.title(allure_story)
-    data = {
-        'PORCENTAJE_ACTAS_CONTABILIZADAS'
-    }
-    df = pd.DataFrame(data)
-    
-    print("DataFrame Original:")
-    print(df)
-    
-    # Asegúrate de operar en la columna (serie) correcta
-    # Paso 1: Eliminar el símbolo '%' de la columna
-    df['Porcentaje'] = df['Porcentaje'].str.replace('%', '', regex=False)
-    
-    # Paso 2: Convertir a flotante
-    df['Porcentaje'] = df['Porcentaje'].astype(float)
-    
-    # Paso 3: Convertir el porcentaje a formato decimal
-    df['Porcentaje'] = df['Porcentaje'] / 100
-      
-    valor_csv=df
+
+    valor_csv = "{:,.0f}".format(int(df[valor].iloc[0]))
+
     # Convertir el tipo de localizador a su objeto correspondiente de Selenium
     locator_type_obj = eval(selector)
     
