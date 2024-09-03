@@ -136,6 +136,7 @@ def test_validacion_datos(setup, df, allure_story, valor, selector, ruta, screen
     allure.dynamic.title(allure_story)
 
     valor_csv = "{:,.0f}".format(float(df[valor].iloc[0]))
+    valor_csv = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].replace('%', '', regex=True).astype(float)
 
   
 
