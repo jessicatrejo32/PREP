@@ -113,7 +113,8 @@ def df():
 
     # Retornar solo las columnas necesarias en un nuevo DataFrame
     selected_columns = df[[
-        "ACTAS_ESPERADAS", "ACTAS_CAPTURADAS", "TOTAL_VOTOS_C_CS","PORCENTAJE_ACTAS_CONTABILIZADAS"
+        #"ACTAS_ESPERADAS", "ACTAS_CAPTURADAS", "TOTAL_VOTOS_C_CS","PORCENTAJE_ACTAS_CONTABILIZADAS"
+        "PORCENTAJE_ACTAS_CONTABILIZADAS"
     ]]
 
     return selected_columns
