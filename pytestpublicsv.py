@@ -114,8 +114,9 @@ def df():
         "ACTAS_CONTABILIZADAS", "PORCENTAJE_ACTAS_CONTABILIZADAS", 
         "PORCENTAJE_ACTAS_INCONSISTENCIAS", "ACTAS_NO_CONTABILIZADAS", 
         "LISTA_NOMINAL_ACTAS_CONTABILIZADAS", "TOTAL_VOTOS_C_CS", 
-        "TOTAL_VOTOS_S_CS", ['PORCENTAJE_PARTICIPACION_CIUDADANA'].astype(str).str.replace('.', '', regex=False)
+        "TOTAL_VOTOS_S_CS",    df['PORCENTAJE_PARTICIPACION_CIUDADANA'] = df['PORCENTAJE_PARTICIPACION_CIUDADANA'].astype(str).str.replace('.', '', regex=False)
     ])
+
 
     # Retornar solo las columnas necesarias en un nuevo DataFrame
     selected_columns = df[[
