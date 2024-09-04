@@ -147,6 +147,7 @@ def test_validacion_datos(setup, df, allure_story, valor, selector, ruta, screen
     
     # Mostrar el DataFrame para verificar los resultados
     print(df)
+    valor_csv=df
 
     # Convertir el tipo de localizador a su objeto correspondiente de Selenium
     locator_type_obj = eval(selector)
