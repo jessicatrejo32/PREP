@@ -140,7 +140,9 @@ def test_validacion_datos(setup, df, allure_story, valor, selector, ruta, screen
     #valor_csv = "{:,.0f}".format(int(df[valor].iloc[0]))
 
     # Eliminar el símbolo '%' y convertir a flotante
-    valor_csv = df[valor].str.replace('%', '').astype(float)
+    #valor_csv = df[valor].str.replace('%', '').astype(float)
+    valor_csv = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].str.replace('%', '').astype(float)
+
     
     # Convertir los valores flotantes a enteros
    # df['PORCENTAJE_ACTAS_CONTABILIZADAS'] = df['PORCENTAJE_ACTAS_CONTABILIZADAS'].round().astype(int)
